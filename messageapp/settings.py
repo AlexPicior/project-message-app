@@ -27,12 +27,13 @@ SECRET_KEY = 'django-insecure-nf_bp^$12eh9p(904nm_*vdg7j=fw=c-w6k-m4t5vcdo(z_4g4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'channels',
     'user_home',
     'django.contrib.admin',
@@ -81,10 +82,10 @@ WSGI_APPLICATION = 'messageapp.wsgi.application'
 ASGI_APPLICATION = 'messageapp.asgi.application'
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
         },
     },
 }
