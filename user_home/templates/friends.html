@@ -1,0 +1,66 @@
+{% extends "user_home_base.html" %}
+
+{% block content %}
+    <div class="div-body-container">
+        <div class="div-body-friends-box">
+            <div class="div-body-friends-box-search">
+                <form method="get" style="display: flex;" class="input-group">
+                    <input class="form-control" type="text" name="q" id="id_q_large" placeholder="Search...">
+                    <button style="width: 70px; height: 30px; padding: 0px;" type="submit" class="div-body-friends-box-search-buttonsearch btn btn-success">Search</button>
+                </form>
+                <button onclick="window.location.href='/home/add_friend'" style="height: 30px; padding-top: 0px; padding-bottom: 0px; font-weight: bold;" class="div-body-friends-box-search-addfriend btn btn-success">+</button>
+            </div>
+            <div class="div-body-friends-box-friends">
+                {% if not search_result %}
+                    <div style="display: flex; justify-content: center;align-items: center; margin: 0px; flex: auto; padding-bottom: 100px;">
+                        <p style="font-size: 15px; color: #535652">No results</p>
+                    </div>
+                {% elif searched_friends %}
+                    {% for searched_friend in searched_friends %}
+                        <div class="div-body-friends-box-friends-friend">
+                            <div style="display: flex;">
+                                <span>{{ searched_friend.username }}</span>
+                                <div style="display: flex;">
+                                    <button onclick="showUnfriendButton(this, this.nextElementSibling)" style="margin-left: 10px; height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-outline-primary">Friend</button>
+                                    <button onclick='sendIdToRemoveFriend("{{ searched_friend.id }}")' style="display: none; height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-primary">Unfriend</button>
+                                </div>
+                                
+                            </div>
+                            <button onclick='sendIdToChatWithFriend("{{ searched_friend.id }}")' style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-button btn btn-success">Chat</button>
+                        </div>
+                    {% endfor %}
+                {% elif friends %}
+                    {% for friend in friends %}
+                        <div class="div-body-friends-box-friends-friend">
+                            <div style="display: flex;">
+                                <span>{{ friend.username }}</span>
+                                <div style="display: flex;">
+                                    <button onclick="showUnfriendButton(this, this.nextElementSibling)" style="margin-left: 10px; height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-outline-primary">Friend</button>
+                                    <button onclick='sendIdToRemoveFriend("{{ friend.id }}")' style="display: none; height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-primary">Unfriend</button>
+                                </div>
+                                
+                            </div>
+                            <button onclick='sendIdToChatWithFriend("{{ friend.id }}")' style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-button btn btn-success">Chat</button>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="display: flex; justify-content: center;align-items: center; margin: 0px; flex: auto; padding-bottom: 100px;">
+                        <p style="font-size: 15px; color: #535652">No friends</p>
+                    </div>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function executeQuery() {
+            var query = ""
+            
+            query = document.getElementById('id_q_large').value;
+            
+            window.location.replace("{% url 'friends' %}?q=" + query)
+            return false
+        }
+    </script>
+{% endblock %}

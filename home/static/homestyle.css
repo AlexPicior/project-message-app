@@ -1,0 +1,23 @@
+.div-elem{
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    margin-top: -50px;
+    margin-left: -100px;
+    width: auto;
+    height: auto;
+}
+
+.div-btn{
+    text-align: center;
+}
+
+.btn-left{
+    margin-right: 20px;
+    width: 100px;
+}
+
+.btn-right{
+    margin-left: 20px;
+    width: 100px;
+}

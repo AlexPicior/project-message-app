@@ -1,0 +1,26 @@
+{% extends "user_home_base.html" %}
+
+{% block content %}
+    <div class="div-body-container">
+        <div class="div-body-friends-box">
+            <div class="div-body-friends-box-friends">
+                
+                {% if friend_requests %}
+                    {% for friend_request in friend_requests %}
+                        <div class="div-body-friends-box-friends-friend">
+                            <span>{{ friend_request.sender.username }}</span>
+                            <div class="div-body-friends-box-friends-friend-acceptance">
+                                <button style="height: 30px; width: 75px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-accept btn btn-secondary" onclick='sendFriendRequestId("{{friend_request.id}}")'>Accept</button>
+                                <button style="height: 30px; width: 75px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-reject btn btn-danger" onclick='sendIdToDeclineFriendRequest("{{friend_request.id}}")'>Decline</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="display: flex; justify-content: center;align-items: center; margin: 0px; flex: auto; padding-bottom: 50px;">
+                        <p style="font-size: 15px; color: #535652">No friend request</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

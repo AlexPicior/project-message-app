@@ -1,0 +1,32 @@
+<script type="text/javascript">
+
+    function switchSelected(id, uiUpdateFunction)
+    {
+        payload = {
+			"csrfmiddlewaretoken": "{{ csrf_token }}",
+			"new_selected_id": id,
+		}
+		$.ajax({
+			type: 'POST',
+			dataType: "json",
+			url: "{% url 'message:switch-selected' %}",
+			data: payload,
+			timeout: 5000,
+			success: function(data) {
+				if(data['response'] == "Switched successfully."){
+				    uiUpdateFunction(data['new_selected_recent_room_id'], data['old_selected_recent_room_id'], data['new_selected_chat_room_id'], data['old_selected_chat_room_id'])
+				}
+				else if(data['response'] != null){
+					alert(data['response'])
+				}
+			},
+			error: function(data) {
+				console.error("ERROR...", data)
+				alert("Something went wrong.")
+			},
+			complete: function(data){
+                
+			}
+		});
+    }
+</script>

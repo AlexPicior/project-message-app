@@ -1,0 +1,367 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .div-base
+            {
+                display: flex;
+                flex-flow: column;
+                height: 100%;
+            }
+           .div-header
+            {
+                height: 20%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            .div-header-st-half
+            {
+                width: 100%;
+                height: 50%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .div-header span
+            {
+                color: black;
+                font-size: 20px;
+            }
+            .div-header-nd-half
+            {
+                width: 100%;
+                height: 50%;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-end;
+            }
+            .div-header-nd-half button
+            {
+                height: 50px;
+                width: 125px;
+                padding: 0px;
+            }
+            .div-footer
+            {
+                background-color: #36454f;
+                position: fixed;
+                bottom: 0;
+                flex: none;
+                height: 10%;
+                width: 100%;
+            }
+            .div-body
+            {
+                flex: auto;
+                display: flex;
+                height: 70%;
+            }
+            .div-body-container
+            {
+                flex: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+            .div-body-friends-box
+            {
+                border: 3px solid #535652;
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                height: 90%;
+                width: 30%;
+            }
+            .div-body-friends-box-search
+            {
+                height: 15%;
+                margin: 0px;
+                flex: auto;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
+            .div-body-friends-box-search form
+            {
+                margin: 0px;
+                flex: auto;
+            }
+            .div-body-friends-box-search input
+            {
+                height: 30px;
+                flex: auto;
+                margin-left: 10px;
+            }
+            .div-body-friends-box-search-buttonsearch
+            {
+                margin-right: 10px;
+            }
+            .div-body-friends-box-search-addfriend
+            {
+                margin-right: 10px;
+            }
+            .div-body-friends-box-friends
+            {
+                height: 85%;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+            }
+            .div-body-friends-box-friends-friend
+            {
+                min-height: 50px;
+                max-height: 50px;
+                flex: auto;
+                margin: 3px;
+                border: 2px solid #535652;
+                border-radius: 5px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .div-body-friends-box-friends-friend span
+            {
+                color: black;
+                font-size: 20px;
+                margin-left: 15px;
+            }
+            .div-body-friends-box-friends-friend-button
+            {
+                margin-right: 15px;
+            }
+            .div-body-friends-box-friends-friend-acceptance
+            {
+                height: auto;
+                width: auto;
+                margin-right: 15px;
+            }
+            .div-body-friends-box-friends-friend-acceptance button
+            {
+                width: 65px;
+            }
+            .div-recent-messages
+            {
+                width: 30%;
+                display: flex;
+                flex-direction: column;
+            }
+            .div-recent-messages-new-chat
+            {
+                height: 10%;
+                flex: auto;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
+            .div-recent-messages-new-chat button
+            {
+                margin-right: 10px;
+                height: 30px;
+            }
+            .div-recent-messages-people
+            {
+                height: 90%;
+                flex: auto;
+                overflow: auto;
+                display: flex;
+                flex-direction: column;
+            }
+            .div-recent-messages-people-friend
+            {
+                max-height: 50px;
+                min-height: 50px;
+                margin: 3px;
+                border: 2px solid #535652;
+                border-radius: 5px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .div-recent-messages-people-friend p
+            {
+                color: black;
+                font-size: 20px;
+                margin-left: 15px;
+                margin-top: 0;
+                margin-bottom: 0;
+                margin-right: 0;
+            }
+            .div-chatbox
+            {
+                border-left: 0px;
+                border-right: 0px;
+                width: 70%;
+                flex: auto;
+                display: flex;
+                flex-direction: column;
+            }
+            .div-messages
+            {
+                display: flex;
+                flex-direction: column-reverse;
+                flex: auto;
+                overflow-y: auto;
+                border: 0.5px solid lightgrey;
+                border-radius: 20px;
+                padding: 5px;
+                margin: 8px;
+                margin-bottom: 0px;
+            }
+            .div-messages-message
+            {
+                border-color: #DADADA;
+                border-style: solid;
+                background-color: #DADADA;
+                border-radius: 15px;
+                font-size: 15px;
+                padding: 8px;
+                width: auto;
+                max-width: 200px;
+                overflow-wrap: break-all;
+            }
+            .div-send
+            {
+                min-height: 50px;
+                max-height: 50px;
+                padding: 8px;
+                margin: 0;
+                display: flex;
+                justify-content: flex-end;
+            }
+            .input-send
+            {
+                flex: auto;
+            }
+        </style>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">  
+    </head>
+    <body>
+        <div class="base-div">
+            <div class="div-header bg-success">
+                <div class="div-header-st-half">
+                    {% if user.is_authenticated %}
+                        <div style="background-color: white; margin-left: 20px; padding: 10px; border: 1px solid white; border-radius: 30px;">
+                            <span>Welcome, </span>
+                            <span id="user">{{ user.username }}</span>
+                        </div>
+                        <button onclick="window.location.href='/logout'" style="margin-right: 20px;" class="btn btn-danger">Logout</button>
+                    {% else %}
+                        <a href="/login">Login</a>
+                    {% endif %}
+                </div>
+                <div class="div-header-nd-half">
+                    <div class="btn-group btn-group-lg">
+                        <button onclick="window.location.href='/home'" style="font-size: 18px; padding: 5px; padding-bottom: 2px; background-color: white; border-radius: 20px 0 0 0;" class="button-messages btn btn-light">Messages</button>
+                        <button onclick="window.location.href='/home/friends'" style="font-size: 18px; padding: 5px; padding-bottom: 2px; background-color: white;" class="button-friends btn btn-light">Friends</button>
+                        <button onclick="window.location.href='/home/notifications'" style="font-size: 18px; padding: 5px; padding-bottom: 2px; background-color: white; border-radius: 0 20px 0 0;" class="button-notifications btn btn-light">Notifications</button>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="div-body">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div class="div-footer"></div>
+        </div>
+        
+        <script type="text/javascript">
+            function showUnfriendButton(y, x)
+            {
+                if (x.style.display === "none") 
+                {
+                    x.style.display = "block";
+                    y.style.opacity = 0.6;
+                } 
+                else
+                {
+                    x.style.display = "none";
+                    y.style.opacity = 1;
+                }
+            }
+        </script>
+        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        {% include 'friend/snippets/send_friend_request.html' %}
+        {% include 'friend/snippets/accept_friend_request.html' %}
+        {% include 'friend/snippets/remove_friend.html' %}
+        {% include 'friend/snippets/decline_friend_request.html' %}
+        {% include 'friend/snippets/cancel_friend_request.html' %}
+        {% include 'message/snippets/chat_with_friend.html' %}
+
+        
+
+        <script type="text/javascript">
+            function onFriendRequestSent()
+            {
+                location.reload()
+            }
+            function onFriendRequestAccepted()
+            {
+                location.reload()
+            }
+            function onFriendRemove()
+            {
+                location.reload()
+            }
+            function onFriendRequestDeclined()
+            {
+                location.reload()
+            }
+            function onFriendRequestCanceled()
+            {
+                location.reload()
+            }
+
+
+
+            function sendIdToFriendRequest(id)
+            {
+                receiver_id = String(id)
+                sendFriendRequest(receiver_id, onFriendRequestSent)
+            }
+
+            function sendFriendRequestId(friend_request_id)
+            {
+                acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+            }
+            function sendIdToRemoveFriend(id)
+            {
+                removeFriend(id, onFriendRemove)
+            }
+            function sendIdToDeclineFriendRequest(id)
+            {
+                declineFriendRequest(id, onFriendRequestDeclined)
+            }
+            function sendIdToCancelFriendRequest(id)
+            {
+                cancelFriendRequest(id, onFriendRequestCanceled)
+            }
+
+        </script>
+        
+        <script type="text/javascript">
+            function onChatWithFriend()
+            {
+                window.location.href='/home'
+            }
+
+            function sendIdToChatWithFriend(id)
+            {
+                chatWithFriend(id, onChatWithFriend)  
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+        
+    </body>
+</html>

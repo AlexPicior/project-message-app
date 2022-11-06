@@ -1,0 +1,177 @@
+{% extends "user_home_base.html" %}
+
+{% block content %}
+    <div class="div-recent-messages">
+        <div class="div-recent-messages-new-chat">
+            <button onclick="window.location.href='/home/friends'" style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-success">Start chat</button>
+        </div>
+
+        <div class="div-recent-messages-people">
+            {% if recent_rooms %}
+                {% for recent_room in recent_rooms %}
+                    {% if recent_room.is_selected %}
+                        <div id="recent-room-{{ recent_room.id }}" onclick='sendIdToSwitchSelected("{{ recent_room.id }}")' style="background-color: lightgrey;" class="div-recent-messages-people-friend">
+                            <div>
+                                <p>{{ recent_room.partener.username }}</p>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div id="recent-room-{{ recent_room.id }}" onclick='sendIdToSwitchSelected("{{ recent_room.id }}")' class="div-recent-messages-people-friend">
+                            <div>
+                                <p>{{ recent_room.partener.username }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div style="display: flex; justify-content: center;align-items: center; margin: 0px; flex: auto; padding-bottom: 100px;">
+                    <p style="font-size: 15px; color: #535652">No chats yet</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% if chat_rooms and the_selected %}
+        <form name="{{ the_selected.room.id }}" id="keeper" style="display: none;"></form>
+        <div id="{{ the_selected.id }}" class="div-chatbox">
+            {% for chat_room in chat_rooms %}
+                {% if chat_room.0 == the_selected.room %}
+                    <div id="chat-room-{{ chat_room.0.id }}" class="div-messages">
+                        {% for message in chat_room.1 %}
+                            {% if message.messager == user %}
+                                <div style="display: flex; justify-content: flex-end; margin: 10px;">
+                                    <div class="div-messages-message">
+                                        {{ message.text }}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; justify-content: flex-start; margin: 10px;">
+                                    <span style="margin-top: 7px; margin-right: 5px; font-size: 17px;">{{ message.messager.username }}:</span>
+                                    <div class="div-messages-message">
+                                        {{ message.text }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div id="chat-room-{{ chat_room.0.id }}" style="display: none;" class="div-messages">
+                        {% for message in chat_room.1 %}
+                            {% if message.messager == user %}
+                                <div style="display: flex; justify-content: flex-end; margin: 10px;">
+                                    <div class="div-messages-message">
+                                        {{ message.text }}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div style="display: flex; justify-content: flex-start; margin: 10px;">
+                                    <span style="margin-top: 6px; margin-right: 5px; font-size: 17px;">{{ message.messager.username }}:</span>
+                                    <div class="div-messages-message">
+                                        {{ message.text }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+            {% endfor %}
+            
+            <form id="form" class="div-send input-group">
+                <input type="text" class="input-send form-control" placeholder="Aa" name="message">
+                <button class="btn btn-success" style="padding-top: 0px; padding-bottom: 0px;">Send</button>
+            </form>
+        </div>
+    {% else %}
+        <div style="display: flex; flex-direction: column; justify-content: center;align-items: center; margin: 10px; flex: auto; padding-bottom: 100px;" class="div-messages">
+            <p style="font-size: 20px;" class="fw-light">Start a conversation</p>
+            <button onclick="window.location.href='/home/friends'" style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="btn btn-success">Send message</button>
+        </div>
+    {% endif %}
+    
+    <script type="text/javascript">
+        let url = 'ws://' + window.location.host + '/ws/socket-server/'
+        let user_username = document.getElementById('user').innerText
+
+        const chatSocket = new WebSocket(url)
+
+        chatSocket.onmessage = function(e){
+            let data = JSON.parse(e.data)
+
+            if(data.type == 'chat')
+            {
+                let the_id = "chat-room-" + data.chat_room_id
+                let messages = document.getElementById(the_id)
+
+                if (data.sender_username == user_username)
+                {
+                    messages.insertAdjacentHTML('afterbegin', `<div style="display: flex; justify-content: flex-end; margin: 10px;">
+                                <div class="div-messages-message">
+                                    ${data.message}
+                                </div>
+                            </div>`)
+                }
+                else
+                {
+                    messages.insertAdjacentHTML('afterbegin', `<div style="display: flex; justify-content: flex-start; margin: 10px;">
+                                <span style="margin-top: 6px; margin-right: 5px; font-size: 17px;">${data.sender_username}:</span>
+                            <div class="div-messages-message">
+                                ${data.message}
+                            </div>
+                        </div>`)
+                }
+                
+            }
+        }
+
+        let form = document.getElementById('form')
+        if (form)
+        {
+            form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let selected = document.getElementById('keeper')
+            let chat_room_id = String(selected.name)
+            let message = e.target.message.value
+            chatSocket.send(JSON.stringify({
+                'message':message,
+                'group_name':chat_room_id,
+                'sender_username':user_username,
+            }))
+            form.reset()
+        })
+        }
+        
+    </script>
+
+    {% include 'message/snippets/switch_selected.html' %}
+    <script type="text/javascript">
+        function switchTheSelected(new_selected_recent_room_id, old_selected_recent_room_id, new_selected_chat_room_id, old_selected_chat_room_id)
+        {
+            new_selected_recent_room_id = "recent-room-" + new_selected_recent_room_id
+            old_selected_recent_room_id = "recent-room-" + old_selected_recent_room_id
+            new_selected_chat_room_id = "chat-room-" + new_selected_chat_room_id
+            old_selected_chat_room_id = "chat-room-" + old_selected_chat_room_id
+
+            new_selected_recent_room = document.getElementById(new_selected_recent_room_id)
+            old_selected_recent_room = document.getElementById(old_selected_recent_room_id)
+            new_selected_chat_room = document.getElementById(new_selected_chat_room_id)
+            old_selected_chat_room = document.getElementById(old_selected_chat_room_id)
+
+            if(old_selected_recent_room)
+            {
+                old_selected_recent_room.style.backgroundColor = "white"
+            }
+            new_selected_recent_room.style.backgroundColor = "lightgrey"
+            if(old_selected_chat_room)
+            {
+                old_selected_chat_room.style.display = "none"
+
+            }
+            new_selected_chat_room.style.display = "flex"
+        }
+
+        function sendIdToSwitchSelected(id)
+        {
+            switchSelected(id, switchTheSelected)
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "user_home_base.html" %}
+
+{% block content %}
+    <div class="div-body-container">
+        <div class="div-body-friends-box">
+            <form method="get" class="div-body-friends-box-search input-group" style="align-items: center;">
+                <input type="text" name="q" id="id_q_large" class="form-control" placeholder="Search...">
+                <button style="width: 70px; height: 30px; padding: 0px;" class="div-body-friends-box-search-buttonsearch btn btn-success" type="submit">Search</button>
+            </form>
+            <div class="div-body-friends-box-friends">
+                {% if accounts %}
+                    {% for account in accounts %}
+                        {% if account.0.id != user.id and account.0.is_superuser == False %}
+                            <div class="div-body-friends-box-friends-friend">
+                                <div style="display: flex; margin: 0px;">
+                                    <span>{{ account.0.username }}</span>
+                                </div>
+                                {% if account.1 %}
+                                    <button style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-button btn btn-outline-primary" id="{{account.0.id}}">Friend</button>
+                                {% elif account.3 %}
+                                    <div class="div-body-friends-box-friends-friend-acceptance">
+                                        <button style="height: 30px; width: 75px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-accept btn btn-secondary" onclick='sendFriendRequestId("{{other_friend_request_id}}")'>Accept</button>
+                                        <button style="height: 30px; width: 75px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-reject btn btn-danger" onclick='sendIdToDeclineFriendRequest("{{other_friend_request_id}}")'>Decline</button>
+                                    </div>
+                                {% elif account.2 %}
+                                    <button style="height: 30px; width: 135px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-button btn btn-danger" onclick='sendIdToCancelFriendRequest("{{account.0.id}}")'>Cancel Request</button>
+                                {% else %}
+                                    <button style="height: 30px; padding-top: 0px; padding-bottom: 0px;" class="div-body-friends-box-friends-friend-button btn btn-success" id="{{account.0.id}}" onclick="sendIdToFriendRequest(this.id)">Add</button>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div style="display: flex; justify-content: center;align-items: center; margin: 0px; flex: auto; padding-bottom: 100px;">
+                        <p style="font-size: 15px; color: #535652">No results</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function executeQuery() {
+            var query = ""
+            
+            query = document.getElementById('id_q_large').value;
+            
+            window.location.replace("{% url 'add_friend' %}?q=" + query)
+            return false
+        }
+    </script>
+{% endblock %}
