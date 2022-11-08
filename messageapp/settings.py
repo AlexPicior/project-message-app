@@ -91,6 +91,10 @@ CHANNEL_LAYERS = {
     },
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://project-message-app.herokuapp.com'
+]
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
