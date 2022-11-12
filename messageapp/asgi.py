@@ -1,28 +1,17 @@
 import os
 
-from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
-from django.urls import path
+from channels.auth import AuthMiddlewareStack
+import user_home.routing
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "messageapp.settings")
-# Initialize Django ASGI application early to ensure the AppRegistry
-# is populated before importing code that may import ORM models.
-django_asgi_app = get_asgi_application()
-
-from user_home.consumers import ChatConsumer
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'messageapp.settings')
 
 application = ProtocolTypeRouter({
-    # Django's ASGI application to handle traditional HTTP requests
-    "http": django_asgi_app,
-
-    # WebSocket chat handler
-    "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter([
-                path("chat/", ChatConsumer.as_asgi()),
-            ])
+    'http': get_asgi_application(),
+    'websocket':AuthMiddlewareStack(
+        URLRouter(
+            user_home.routing.websocket_urlpatterns
         )
-    ),
+    )
 })

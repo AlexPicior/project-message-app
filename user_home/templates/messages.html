@@ -89,7 +89,7 @@
     {% endif %}
     
     <script type="text/javascript">
-        let url = 'wss://' + window.location.host + '/ws/socket-server/'
+        let url = 'ws://' + window.location.host + '/ws/socket-server/'
         let user_username = document.getElementById('user').innerText
 
         const chatSocket = new WebSocket(url)

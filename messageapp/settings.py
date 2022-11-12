@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import os
 from pathlib import Path
 from telnetlib import LOGOUT
-import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,13 +26,12 @@ SECRET_KEY = 'django-insecure-nf_bp^$12eh9p(904nm_*vdg7j=fw=c-w6k-m4t5vcdo(z_4g4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'channels',
     'user_home',
     'django.contrib.admin',
@@ -83,23 +80,19 @@ WSGI_APPLICATION = 'messageapp.wsgi.application'
 ASGI_APPLICATION = 'messageapp.asgi.application'
 
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
         },
     },
 }
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://project-message-app.herokuapp.com'
-]
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DB_NAME = "demo_1"
-DB_USER = "postgres"
+DB_NAME = "messageapp"
+DB_USER = "django"
 DB_PASSWORD = "password"
 DATABASES = {
     'default': {
@@ -107,13 +100,10 @@ DATABASES = {
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
-        'HOST': 'database-1.cpqpimiea2jq.us-east-1.rds.amazonaws.com',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -151,8 +141,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 # Default primary key field type
@@ -165,5 +153,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = '/home'
 
 LOGOUT_REDIRECT_URL = '/login'
-
-django_heroku.settings(locals())
