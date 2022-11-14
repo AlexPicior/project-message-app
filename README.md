@@ -2,7 +2,7 @@
  
  I built a WhatsApp clone by using websockets for real-time communication, Django, HTML and Bootstrap for interface and PostgreSQL as database.
 
- The project has the following systems: real-time messaging, login and register, searching in friend list and sending, accepting and rejecting a friend request.
+ The project has the following systems: real-time messaging, login, register, searching in friend list and sending, accepting and rejecting a friend request.
 
 #
 
