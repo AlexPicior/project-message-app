@@ -1,6 +1,6 @@
 # Summary of the project
  
- I built a WhatsApp clone by using websockets for real-time communication, Django, Bootstrap and PostgreSQL.
+ I built a chat app by using websockets for real-time communication, Django, Bootstrap and PostgreSQL.
 
  The project has the following systems: real-time messaging, login, register, searching in friend list and sending, accepting and rejecting a friend request.
 
